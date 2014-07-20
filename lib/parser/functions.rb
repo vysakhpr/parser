@@ -22,13 +22,18 @@ end
 
 def got(i,x,g)
    	l=[ ]
-   	for k in i.find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.] [#{x}][ ][\Wa-zA-Z ]*$/}
+   	y=x
+   	x=x.split("").join("[")
+   	x=x.insert(0,"[")
+   	x=x.scan(/./).each_slice(2).map(&:join).join("]")
+   	x=x.insert(x.length,"]")
+   	for k in i.find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.] #{x} [\Wa-zA-Z ]*$/}
 		a=k[/^[A-Z]+->[ ][\WA-Za-z ]*[.]/]
 		a=a.gsub(".","")
-		b=k[/[.] [#{x}][ ][\Wa-zA-Z ]*$/]
+		b=k[/[.] #{x} [\Wa-zA-Z ]*$/]
 		b=b.gsub(". ","")
- 		b.delete!("#{x}")
- 		a=a+x+" ."+b
+ 		b=b.gsub("#{y}","")
+ 		a=a+y+" ."+b
  		a=a.gsub(/[\s]+$/," ")
  		l<<a
 	end		
@@ -37,7 +42,7 @@ end
 
 def items(g)
 	c=[closure(["SS-> . S "],g)]
-	gram_sym=[ "S","L","R","=","*" ]
+	gram_sym=[ "S","L","R","=","*","id"]
 	begin
 		f=0
 		for i in c
