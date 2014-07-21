@@ -128,7 +128,15 @@ def table(g, table_action_sym, table_goto_sym,gram_sym)
 			print $action[i][j]
 			print "\t"
 		end
+
+		for j in (0...table_goto_sym.length)
+			print $goto_table[i][j]
+			print "\t"
+		end
 		print("\n")
 	end
+
+	print "\n\n\n"
+
 end
 
