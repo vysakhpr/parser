@@ -10,6 +10,7 @@ def closure(i,g)
 				n=m[/->[ ][\W0-9A-Za-z ]+/]
 				n.gsub!(/->/, '')
 				n=l+"-> ."+n+" "
+				n=n.gsub(/[\s]+$/," ")
 				unless j.include?(n)
 					j<<n
 					f=1
@@ -27,7 +28,7 @@ def got(i,x,g)
    	x=x.insert(0,"[")
    	x=x.scan(/./).each_slice(2).map(&:join).join("]")
    	x=x.insert(x.length,"]")
-   	for k in i.find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.] #{x} [\Wa-zA-Z ]*$/}
+   	for k in i.find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.] #{x} [\Wa-zA-Z0-9 ]*$/}
 		a=k[/^[A-Z]+->[ ][\WA-Za-z ]*[.]/]
 		a=a.gsub(".","")
 		b=k[/[.] #{x} [\Wa-zA-Z ]*$/]
@@ -40,9 +41,8 @@ def got(i,x,g)
     return closure(l,g)
 end
 
-def items(g)
+def items(g,gram_sym)
 	c=[closure(["SS-> . S "],g)]
-	gram_sym=[ "S","L","R","=","*","id"]
 	begin
 		f=0
 		for i in c
