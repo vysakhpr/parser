@@ -28,4 +28,7 @@ module Parser
   #end
   #print followof("S",term_sym,non_term_sym,g)
   table(g,term_sym,non_term_sym,gram_sym)
+  puts "Enter the input"
+  z=gets.chomp
+  parse(z,term_sym,non_term_sym,g)
 end

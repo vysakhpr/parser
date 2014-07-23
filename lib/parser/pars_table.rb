@@ -140,3 +140,53 @@ def table(g, table_action_sym, table_goto_sym,gram_sym)
 
 end
 
+def parse(word,term_sym,non_term_sym,g)
+	word=word+"$"
+	words=word.split(/[\s]/)
+	len=words.length
+	j=0
+	st=[0]
+	l=0
+    while true
+    	a=words[j]
+		s=st[l]
+		unless s.nil?
+		d=$action[s.to_i][term_sym.index(a)]
+		end
+		#for z in (0..l)
+		#	print st[z]
+		#end
+		#print "\t\t"
+		#print d
+		#print "\t\t"
+		if d =~ /^[s]/
+			b=d.gsub(/^[s]/,"")
+			l=l+1
+			st[l]=b.to_i
+			j=j+1
+		elsif d =~ /^[r]/
+			b=d.gsub(/^[r]/,"")
+			b=b.to_i
+			x=g[b-1]
+			c=x[/[A-Z]+->/]
+			y=x[/->[\Wa-zA-Z0-9 ]+/]
+			y=y.gsub("->","")
+			c=c.gsub("->","")
+			y=y.split(" ")			
+			for i in (0...y.length)
+				l=l-1
+			end
+			t=st[l]
+			l=l+1
+			st[l]=$goto_table[t.to_i][non_term_sym.index(c)]
+			#puts x
+		elsif d=="ac"
+			puts "ACCEPTED"
+			break
+		else	
+			puts "ERROR"
+			break	
+		end
+	end
+end
+
