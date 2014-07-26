@@ -10,7 +10,7 @@ def firstof(x,term_sym, non_term_sym,g)
 			l.delete!("->")
 			l=l.split(" ")
 			for m in l
-				unless firstof(m, term_sym, non_term_sym, g).include?("epsilon")
+				unless firstof(m, term_sym, non_term_sym, g).include?("")
 					n=m
 					break;
 				end
@@ -23,7 +23,7 @@ def firstof(x,term_sym, non_term_sym,g)
 					end
 				end
 			else
-			    f<<"epsilon" if !(f.include?("epsilon"))
+			    f<<"" if !(f.include?(""))
 			end
 		end
 	end
@@ -76,8 +76,8 @@ end
 
 
 
-def table(g, table_action_sym, table_goto_sym,gram_sym)
-	c=items(g,gram_sym)
+def table(g, table_action_sym, table_goto_sym, gram_sym, start_sym)
+	c=items(g,gram_sym, start_sym)
 	$action=Array.new(c.length){Array.new(table_action_sym.length)}
 	$goto_table=Array.new(c.length){Array.new(table_goto_sym.length)}
 	for i in (0...c.length)
@@ -97,11 +97,13 @@ def table(g, table_action_sym, table_goto_sym,gram_sym)
 		end
 
 		for k in c[i].find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.][ ]$/}
+			#puts k
 			l=k.gsub(". ","")
 			a=k[/^[A-Z]+->/]
 			a=a.gsub("->","")
 			#unless a == "SS"
 				j=g.index(l)
+				#puts j
 				for m in followof(a, table_action_sym, table_goto_sym,g)
 					unless table_action_sym.index(m).nil?
 						$action[i][table_action_sym.index(m)]="r#{j+1}"
@@ -110,7 +112,7 @@ def table(g, table_action_sym, table_goto_sym,gram_sym)
 			#end
 		end	
 
-		if c[i].include?("SS-> S . ")
+		if c[i].include?("SS-> #{start_sym} . ")
 			$action[i][table_action_sym.index("$")]="ac"
 		end
 
@@ -158,7 +160,7 @@ def parse(word,term_sym,non_term_sym,g)
 		#end
 		#print "\t\t"
 		#print d
-		#print "\t\t"
+		#print "\t\t\n"
 		if d =~ /^[s]/
 			b=d.gsub(/^[s]/,"")
 			l=l+1
@@ -168,8 +170,8 @@ def parse(word,term_sym,non_term_sym,g)
 			b=d.gsub(/^[r]/,"")
 			b=b.to_i
 			x=g[b-1]
-			c=x[/[A-Z]+->/]
-			y=x[/->[\Wa-zA-Z0-9 ]+/]
+			c=x[/^[A-Z]+->/]
+			y=x[/->[\Wa-zA-Z0-9 ]+$/]
 			y=y.gsub("->","")
 			c=c.gsub("->","")
 			y=y.split(" ")			
@@ -179,7 +181,7 @@ def parse(word,term_sym,non_term_sym,g)
 			t=st[l]
 			l=l+1
 			st[l]=$goto_table[t.to_i][non_term_sym.index(c)]
-			#puts x
+			puts x
 		elsif d=="ac"
 			puts "ACCEPTED"
 			break

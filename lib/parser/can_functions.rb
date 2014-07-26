@@ -6,7 +6,7 @@ def closure(i,g)
 		for k in j.find_all{|item| item =~ /^[A-Z]+->[ ][\W0-9a-zA-Z ]*[.][ ][A-Z]+[ ]?[a-zA-Z0-9\W ]*$/}
 			l=k[/[.][ ][A-Z]*[ ]/]
 			l.delete!(". ")
-			for m in g.find_all{|item| item =~ /#{l}->/}
+			for m in g.find_all{|item| item =~ /^#{l}->/}
 				n=m[/->[ ][\W0-9A-Za-z ]+/]
 				n.gsub!(/->/, '')
 				n=l+"-> ."+n+" "
@@ -32,8 +32,11 @@ def got(i,x,g)
 		a=k[/^[A-Z]+->[ ][\WA-Za-z ]*[.]/]
 		a=a.gsub(".","")
 		b=k[/[.] #{x} [\Wa-zA-Z ]*$/]
-		b=b.gsub(". ","")
- 		b=b.gsub("#{y}","")
+		#b=k[/[.] #{x} /]
+		#c=k[/[.] #{x} [\Wa-zA-Z0-9 ]*$/]
+		#c=c.gsub(b,"  ")
+		#b=b.gsub(". "," ")
+ 		b=b.gsub(". #{y} "," ")
  		a=a+y+" ."+b
  		a=a.gsub(/[\s]+$/," ")
  		l<<a
@@ -41,8 +44,8 @@ def got(i,x,g)
     return closure(l,g)
 end
 
-def items(g,gram_sym)
-	c=[closure(["SS-> . S "],g)]
+def items(g,gram_sym, start_sym)
+	c=[closure(["SS-> . #{start_sym} "],g)]
 	begin
 		f=0
 		for i in c
