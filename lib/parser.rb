@@ -21,7 +21,9 @@ module Parser
      "STMTS-> STMT ; ",
      "STMT-> DATATYPE IDS ",
      "STMT-> id = EXPR ",
-     "EXPR-> EXPR + TERM ","EXPR-> TERM ","TERM-> TERM * FACTOR ","TERM-> FACTOR ","FACTOR-> ( EXPR ) ","FACTOR-> id ", 
+     "STMT-> printf ( string , IDS ) ",
+     "STMT-> printf ( string ) ",
+     "EXPR-> EXPR + TERM ","EXPR-> TERM ","TERM-> TERM * FACTOR ","TERM-> FACTOR ","FACTOR-> ( EXPR ) ","FACTOR-> id ","FACTOR-> num ",  
      "IDS-> id , IDS ",
      "IDS-> id ",
      "DATATYPE-> int ",
@@ -29,8 +31,8 @@ module Parser
      "DATATYPE-> char ",
      "FNAME-> NAME ( ) ",
       "NAME-> main "]
-  gram_sym=["S","DATATYPE","EXPR","TERM","FACTOR", "FNAME","NAME","STMT", "IDS" ,"STMTS","id","int","char","void","main","+","*","=","{","}","(",")",";",",","$","epsilon"]
-  term_sym=["id","int","void","char","main","+","*","=","{","}","(",")",";",",","$","epsilon"]
+  gram_sym=["S","DATATYPE","EXPR","TERM","FACTOR", "FNAME","NAME","STMT", "IDS" ,"STMTS","id","num","int","char","void","main","printf","string","+","*","=","{","}","(",")",";",",","$","epsilon"]
+  term_sym=["id","num","int","void","char","main","printf","string","+","*","=","{","}","(",")",";",",","$","epsilon"]
   non_term_sym=["S","DATATYPE","EXPR","TERM","FACTOR" ,"FNAME","NAME","STMT","IDS","STMTS"]
   start_sym="S"
   
